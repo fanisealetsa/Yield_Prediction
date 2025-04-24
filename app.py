@@ -1,15 +1,25 @@
-import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import pickle
 
 app = Flask(__name__)
+
+# Load the model
+with open('model.pkl', 'rb') as f:
+    model = pickle.load(f)
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+@app.route('/predict', methods=['POST'])
+def predict():
+    try:
+        rainfall = float(request.form['rainfall'])
+        temperature = float(request.form['temperature'])
+        prediction = model.predict([[rainfall, temperature]])
+        return render_template('result.html', prediction=round(prediction[0], 2))
+    except Exception as e:
+        return render_template('result.html', prediction=f"Error: {e}")
 
 @app.route('/about')
 def about():
@@ -19,14 +29,5 @@ def about():
 def contact():
     return render_template('contact.html')
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    rainfall = float(request.form.get('rainfall'))
-    temperature = float(request.form.get('temperature'))
-    pesticide = float(request.form.get('pesticide'))
-    return render_template('result.html', prediction=42.0) 
-
-
 if __name__ == '__main__':
     app.run(debug=True)
-
