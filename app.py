@@ -1,22 +1,29 @@
-from flask import Flask, render_template, request
-import pickle
+@@ -1,13 +1,16 @@
+import os
+from flask import Flask, render_template
 
+from flask import Flask, render_template, request, jsonify
+import pandas as pd
+
+app = Flask(__name__, template_folder='.')
 app = Flask(__name__)
 
-# Load the model
-with open('model.pkl', 'rb') as f:
-    model = pickle.load(f)
-
 @app.route('/')
+def index():
 def home():
-    return render_template('index.html')
-
-@app.route('/predict', methods=['POST'])
-def predict():
-    rainfall = float(request.form['rainfall'])
-    temperature = float(request.form['temperature'])
-    prediction = model.predict([[rainfall, temperature]])
-    return render_template('result.html', prediction=round(prediction[0], 2))
+return render_template('index.html')
 
 if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
+@app.route('/about')
+def about():
+return render_template('about.html')
+@@ -24,5 +27,5 @@ def predict():
+return jsonify(prediction)
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))  # Get the PORT environment variable
+    app.run(host='0.0.0.0', port=port)
     app.run(debug=True)
