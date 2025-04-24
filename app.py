@@ -21,10 +21,11 @@ def contact():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Placeholder prediction logic
-    data = request.json
-    prediction = {"yield": 100}  # Dummy prediction
-    return jsonify(prediction)
+    rainfall = float(request.form.get('rainfall'))
+    temperature = float(request.form.get('temperature'))
+    pesticide = float(request.form.get('pesticide'))
+    return render_template('result.html', prediction=42.0) 
+
 
 if __name__ == '__main__':
     app.run(debug=True)
