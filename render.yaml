@@ -3,4 +3,4 @@ services:
     name: crop-yield-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python app/app.py
+    startCommand: python app.py
