@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crop Yield Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crop Yield Prediction</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
-        <nav>
-             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-              </ul>
-        </nav>
-    </header>
-    <div class="container">
-        <h1>Crop Yield Prediction</h1>
-        <form id="predictionForm">
-            <label for="pesticides">Pesticides Usage (kg/ha):</label>
-            <input type="number" id="pesticides" step="0.1" required placeholder="e.g., 5.5">
-
+<header>
+<nav>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/about">About</a></li>
+<li><a href="/contact">Contact</a></li>
+</ul>
+</nav>
+</header>
+<div class="container">
+<h1>Crop Yield Prediction</h1>
+<form id="predictionForm">
+<label for="pesticides">Pesticides Usage (kg/ha):</label>
+<input type="number" id="pesticides" step="0.1" required placeholder="e.g., 5.5">
+ 
             <label for="temperature">Average Temperature (°C):</label>
-            <input type="number" id="temperature" step="0.1" required placeholder="e.g., 22.5">
-
+<input type="number" id="temperature" step="0.1" required placeholder="e.g., 22.5">
+ 
             <label for="rainfall">Average Rainfall (mm):</label>
-            <input type="number" id="rainfall" step="0.1" required placeholder="e.g., 300">
-
+<input type="number" id="rainfall" step="0.1" required placeholder="e.g., 300">
+ 
             <button type="submit">Predict</button>
-        </form>
-
+</form>
+ 
         <h3>Prediction Result:</h3>
-        <p id="result"></p>
-    </div>
-    <footer>
-        <p>&copy; 2025 CropSmart AI</p>
-    </footer>
-
+<p id="result"></p>
+</div>
+<footer>
+<p>&copy; 2025 CropSmart AI</p>
+</footer>
+ 
     <script>
         document.getElementById('predictionForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-
+ 
             const pesticides = parseFloat(document.getElementById('pesticides').value);
             const temperature = parseFloat(document.getElementById('temperature').value);
             const rainfall = parseFloat(document.getElementById('rainfall').value);
-
+ 
             const response = await fetch('/predict', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ pesticides, temperature, rainfall })
             });
-
+ 
             const result = await response.json();
-            console.log('result', result);
+            console.log(result);
             document.getElementById('result').innerHTML = result.error ? 
                 `<span style='color:red;'>Error: ${result.error}</span>` :
-                `<strong>Predicted Yield:</strong> ${result.yield} tons/hectare<br>`;
+                `<strong>Predicted Yield:</strong> ${result.predicted_yield.toFixed(2)} tons/hectare<br>
+<strong>Confidence Interval:</strong> (${result.confidence_interval.lower.toFixed(2)}, ${result.confidence_interval.upper.toFixed(2)})<br>
+<strong>Interpretation:</strong> ${result.interpretation}<br>
+<strong>Suggestions:</strong> ${result.improvements}`;
         });
-    </script>
+</script>
 </body>
 </html>
