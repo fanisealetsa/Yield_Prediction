@@ -53,6 +53,7 @@
             });
 
             const result = await response.json();
+            console.log('result', result);
             document.getElementById('result').innerHTML = result.error ? 
                 `<span style='color:red;'>Error: ${result.error}</span>` :
                 `<strong>Predicted Yield:</strong> ${result.yield} tons/hectare<br>`;
