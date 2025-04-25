@@ -10,7 +10,8 @@ MODEL_PATH = "crop_yield_model.pkl"
 SCALER_PATH = "scaler.pkl"
  
 def download_file(url, local_path):
-    response = requests.get(url)
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
     with open(local_path, 'wb') as f:
         f.write(response.content)
