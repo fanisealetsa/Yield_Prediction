@@ -55,10 +55,7 @@
             const result = await response.json();
             document.getElementById('result').innerHTML = result.error ? 
                 `<span style='color:red;'>Error: ${result.error}</span>` :
-                `<strong>Predicted Yield:</strong> ${result.predicted_yield.toFixed(2)} tons/hectare<br>
-                 <strong>Confidence Interval:</strong> (${result.lower.toFixed(2)}, ${result.upper.toFixed(2)})<br>
-                 <strong>Interpretation:</strong> ${result.interpretation}<br>
-                 <strong>Suggestions:</strong> ${result.improvements}`;
+                `<strong>Predicted Yield:</strong> ${result.yield} tons/hectare<br>`;
         });
     </script>
 </body>
